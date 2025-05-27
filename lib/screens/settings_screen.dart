@@ -82,15 +82,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       await _calculateCacheSize();
       
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Önbellek temizlendi'),
+        const SnackBar(
+          content: Text('Önbellek temizlendi'),
           backgroundColor: _surfaceColor,
         ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Önbellek temizlenirken hata oluştu'),
+        const SnackBar(
+          content: Text('Önbellek temizlenirken hata oluştu'),
           backgroundColor: Colors.red,
         ),
       );
@@ -166,7 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildSectionTitle('Uygulama Hakkında'),
             _buildSettingTile(
               'Versiyon',
-              '1.0.0',
+              '1.1.0',
               icon: Icons.info_outline,
             ),
             _buildSettingTile(
@@ -185,7 +185,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           color: _accentColor,
           fontSize: 18,
           fontWeight: FontWeight.bold,
@@ -210,7 +210,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: SwitchListTile(
         title: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: _textColor,
             fontWeight: FontWeight.w500,
           ),
@@ -253,7 +253,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             : null,
         title: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: _textColor,
             fontWeight: FontWeight.w500,
           ),
@@ -288,7 +288,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           foregroundColor: _accentColor,
-          side: BorderSide(color: _accentColor),
+          side: const BorderSide(color: _accentColor),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

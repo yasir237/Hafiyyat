@@ -1,0 +1,28 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.hafiyyat.app-mergeDebugResources-39:/values-night-v31/values-night-v31.xml",
+            "map": [
+                {
+                    "source": "E:\\visual studio code projects\\mobile\\hafiyyat (2)\\hafiyyat\\android\\app\\src\\main\\res\\values-night-v31\\styles.xml",
+                    "from": {
+                        "startLines": "3,19",
+                        "startColumns": "4,4",
+                        "startOffsets": "172,1222",
+                        "endLines": "12,21",
+                        "endColumns": "12,12",
+                        "endOffsets": "871,1386"
+                    },
+                    "to": {
+                        "startLines": "2,12",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,759",
+                        "endLines": "11,14",
+                        "endColumns": "12,12",
+                        "endOffsets": "754,923"
+                    }
+                }
+            ]
+        }
+    ]
+}

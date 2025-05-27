@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:hafiyyat/screens/home_screen.dart';
 import 'package:hafiyyat/screens/splash_screen.dart';
-import 'package:hafiyyat/theme/app_theme.dart';
 import 'package:media_store_plus/media_store_plus.dart';
 
 void main() async {

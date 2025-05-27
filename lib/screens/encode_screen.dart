@@ -86,7 +86,7 @@ class _EncodeScreenState extends State<EncodeScreen> {
               ),
               if (_resultImage != null) ...[
                 const SizedBox(height: 24),
-                Text(
+                const Text(
                   'Sonuç:',
                   style: TextStyle(
                     fontSize: 18,
@@ -122,7 +122,7 @@ class _EncodeScreenState extends State<EncodeScreen> {
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           foregroundColor: _accentColor,
-                          side: BorderSide(color: _accentColor),
+                          side: const BorderSide(color: _accentColor),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -141,7 +141,7 @@ class _EncodeScreenState extends State<EncodeScreen> {
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           foregroundColor: _accentColor,
-                          side: BorderSide(color: _accentColor),
+                          side: const BorderSide(color: _accentColor),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -174,7 +174,7 @@ class _EncodeScreenState extends State<EncodeScreen> {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: _accentColor,

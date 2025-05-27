@@ -42,7 +42,7 @@ class _DecodeScreenState extends State<DecodeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
+              const Text(
                 'Stego Görüntü',
                 style: TextStyle(
                   fontSize: 18,
@@ -114,7 +114,7 @@ class _DecodeScreenState extends State<DecodeScreen> {
               ),
               if (_extractedImage != null) ...[
                 const SizedBox(height: 24),
-                Text(
+                const Text(
                   'Çıkarılan Gizli Görüntü:',
                   style: TextStyle(
                     fontSize: 18,
@@ -150,7 +150,7 @@ class _DecodeScreenState extends State<DecodeScreen> {
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           foregroundColor: _accentColor,
-                          side: BorderSide(color: _accentColor),
+                          side: const BorderSide(color: _accentColor),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -169,7 +169,7 @@ class _DecodeScreenState extends State<DecodeScreen> {
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           foregroundColor: _accentColor,
-                          side: BorderSide(color: _accentColor),
+                          side: const BorderSide(color: _accentColor),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),

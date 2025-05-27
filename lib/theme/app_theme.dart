@@ -15,11 +15,9 @@ class AppTheme {
       primary: cyberGreen,
       secondary: lightGray,
       surface: mediumNavy,
-      background: darkNavy,
       onPrimary: darkNavy,
       onSecondary: darkNavy,
       onSurface: lightGray,
-      onBackground: lightGray,
     ),
     scaffoldBackgroundColor: darkNavy,
     appBarTheme: const AppBarTheme(
@@ -50,11 +48,9 @@ class AppTheme {
       primary: cyberGreen,
       secondary: lightGray,
       surface: mediumNavy,
-      background: darkNavy,
       onPrimary: darkNavy,
       onSecondary: darkNavy,
       onSurface: lightGray,
-      onBackground: lightGray,
     ),
     scaffoldBackgroundColor: darkNavy,
     appBarTheme: const AppBarTheme(

@@ -20,40 +20,87 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: _backgroundColor,
       appBar: const CustomAppBar(title: 'HAFIYYAT'),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+body: SafeArea(
+  child: SingleChildScrollView(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+      children: [
+        const SizedBox(height: 20),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: '{ ',
+                style: TextStyle(
+                  color: _accentColor,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: 'HAFİYYAT',
+                style: TextStyle(
+                  color: _textColor,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 3.0,
+                ),
+              ),
+              TextSpan(
+                text: ' }',
+                style: TextStyle(
+                  color: _accentColor,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(
+                color: _accentColor,
+                width: 3,
+              ),
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '{ ',
-                      style: TextStyle(
-                        color: _accentColor,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'HAFİYYAT',
-                      style: TextStyle(
-                        color: _textColor,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 3.0,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' }',
-                      style: TextStyle(
-                        color: _accentColor,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: _accentColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'BİLGİ GÜÇTÜR',
+                  style: TextStyle(
+                    color: _accentColor,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 3.5,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                'Gizlenen Bilgi, Dünyayı Değiştirir.',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: _textColor,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.6,
+                  height: 1.25,
+                  shadows: [
+                    Shadow(
+                      color: _textColor.withOpacity(0.1),
+                      offset: const Offset(0, 1),
+                      blurRadius: 2,
                     ),
                   ],
                 ),
@@ -62,128 +109,106 @@ class HomeScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  border: Border(
-                    left: BorderSide(
-                      color: _accentColor,
-                      width: 3,
-                    ),
+                  color: _accentColor.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: _accentColor.withOpacity(0.15),
+                    width: 1,
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'GİZLİLİK PROTOKOLÜ v1.0',
-                      style: TextStyle(
-                        color: _accentColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Gizliliğin Gizlendiği Yer.',
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: _textColor,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.8,
-                        height: 1.2,
-                      ),
-                    ),
-                    Text(
-                      '01001110 01001111 01010111',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: _accentColor.withOpacity(0.7),
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 2.0,
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 0.85,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  children: [
-                    FeatureCard(
-                      title: 'Görüntü Gizle',
-                      description: 'Gri görüntüyü renkli fotoğrafa gizle',
-                      icon: Icons.enhanced_encryption,
-                      backgroundColor: _surfaceColor,
-                      iconColor: _accentColor,
-                      textColor: _textColor,
-                      borderColor: _accentColor.withOpacity(0.3),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EncodeScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    FeatureCard(
-                      title: 'Görüntü Çıkar',
-                      description: 'Renkli fotoğraftan gri görüntüyü çıkar',
-                      icon: Icons.no_encryption,
-                      backgroundColor: _surfaceColor,
-                      iconColor: _accentColor,
-                      textColor: _textColor,
-                      borderColor: _accentColor.withOpacity(0.3),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const DecodeScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    FeatureCard(
-                      title: 'Bilgi',
-                      description: 'Steganografi hakkında bilgi edinme',
-                      icon: Icons.info_outline,
-                      backgroundColor: _surfaceColor,
-                      iconColor: _accentColor,
-                      textColor: _textColor,
-                      borderColor: _accentColor.withOpacity(0.3),
-                      onTap: () {
-                        _showInfoDialog(context);
-                      },
-                    ),
-                    FeatureCard(
-                      title: 'Ayarlar',
-                      description: 'Uygulama ayarlarını özelleştir',
-                      icon: Icons.settings,
-                      backgroundColor: _surfaceColor,
-                      iconColor: _accentColor,
-                      textColor: _textColor,
-                      borderColor: _accentColor.withOpacity(0.3),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SettingsScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                child: Text(
+                  '01000001 01101100 01110010 01100001 01110111 01101001',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: _accentColor.withOpacity(0.9),
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 2.5,
+                    fontFamily: 'monospace',
+                    height: 1.3,
+                  ),
                 ),
               ),
             ],
           ),
         ),
-      ),
+        const SizedBox(height: 40),
+        GridView.count(
+          crossAxisCount: 2,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 0.85,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(), // Scroll çakışmasını engeller
+          children: [
+            FeatureCard(
+              title: 'Görüntü Gizle',
+              description: 'Gri görüntüyü renkli fotoğrafa gizle',
+              icon: Icons.enhanced_encryption,
+              backgroundColor: _surfaceColor,
+              iconColor: _accentColor,
+              textColor: _textColor,
+              borderColor: _accentColor.withOpacity(0.3),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EncodeScreen(),
+                  ),
+                );
+              },
+            ),
+            FeatureCard(
+              title: 'Görüntü Çıkar',
+              description: 'Renkli fotoğraftan gri görüntüyü çıkar',
+              icon: Icons.no_encryption,
+              backgroundColor: _surfaceColor,
+              iconColor: _accentColor,
+              textColor: _textColor,
+              borderColor: _accentColor.withOpacity(0.3),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DecodeScreen(),
+                  ),
+                );
+              },
+            ),
+            FeatureCard(
+              title: 'Bilgi',
+              description: 'Steganografi hakkında bilgi edinme',
+              icon: Icons.info_outline,
+              backgroundColor: _surfaceColor,
+              iconColor: _accentColor,
+              textColor: _textColor,
+              borderColor: _accentColor.withOpacity(0.3),
+              onTap: () {
+                _showInfoDialog(context);
+              },
+            ),
+            FeatureCard(
+              title: 'Ayarlar',
+              description: 'Uygulama ayarlarını özelleştir',
+              icon: Icons.settings,
+              backgroundColor: _surfaceColor,
+              iconColor: _accentColor,
+              textColor: _textColor,
+              borderColor: _accentColor.withOpacity(0.3),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
+    ),
+  ),
+),
     );
   }
 
