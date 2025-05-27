@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:hafiyyat/utils/file_utils.dart';
 import 'package:hafiyyat/widgets/custom_app_bar.dart';
+import 'package:hafiyyat/utils/dialog_utils.dart';
 
 class DecodeScreen extends StatefulWidget {
   const DecodeScreen({super.key});
@@ -91,7 +92,7 @@ class _DecodeScreenState extends State<DecodeScreen> {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: (_stegoImage != null && !_isProcessing)
-                    ? _extractImage
+                    ? _startDecoding
                     : null,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
@@ -217,29 +218,57 @@ class _DecodeScreenState extends State<DecodeScreen> {
     }
   }
 
-  Future<void> _extractImage() async {
-    if (_stegoImage == null) return;
+  Future<void> _startDecoding() async {
+    if (_stegoImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Lütfen bir görüntü seçin')),
+      );
+      return;
+    }
 
-    setState(() {
-      _isProcessing = true;
-    });
+    setState(() => _isProcessing = true);
 
     try {
-      final extractedImagePath = await SteganographyService().decodeImage(
+      // Şifre çözme anahtarını sor
+      final decryptionKey = await DialogUtils.showEncryptionKeyDialog(
+        context,
+        isEncoding: false,
+      );
+
+      final stegoService = SteganographyService();
+      final resultPath = await stegoService.decodeImage(
         stegoImagePath: _stegoImage!.path,
+        encryptionKey: decryptionKey, // Anahtar null olabilir
       );
 
       setState(() {
-        _extractedImage = File(extractedImagePath);
+        _extractedImage = File(resultPath);
       });
-    } catch (e) {
+
+      // Başarılı mesajı göster
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Hata: ${e.toString()}')),
+        const SnackBar(
+          content: Text('Görüntü başarıyla çıkarıldı'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString().contains('decrypt')
+                ? 'Hata: Yanlış şifreleme anahtarı veya görüntü şifreli değil'
+                : 'Hata: $e'
+          ),
+          backgroundColor: Colors.red,
+        ),
       );
     } finally {
-      setState(() {
-        _isProcessing = false;
-      });
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 

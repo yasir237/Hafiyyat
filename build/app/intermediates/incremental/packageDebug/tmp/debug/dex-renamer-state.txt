@@ -1,4 +1,4 @@
-#Sat May 24 15:54:11 TRT 2025
+#Sat May 24 16:23:43 TRT 2025
 base.0=E\:\\visual studio code projects\\mobile\\hafiyyat (2)\\hafiyyat\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=E\:\\visual studio code projects\\mobile\\hafiyyat (2)\\hafiyyat\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
 base.2=E\:\\visual studio code projects\\mobile\\hafiyyat (2)\\hafiyyat\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex

@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:typed_data';
 import 'package:hafiyyat/utils/file_utils.dart';
 import 'package:hafiyyat/widgets/custom_app_bar.dart';
+import 'package:hafiyyat/utils/dialog_utils.dart';
 
 class EncodeScreen extends StatefulWidget {
   const EncodeScreen({super.key});
@@ -21,7 +22,7 @@ class EncodeScreen extends StatefulWidget {
 class _EncodeScreenState extends State<EncodeScreen> {
   final ImagePicker _picker = ImagePicker();
   File? _coverImage; // Renkli görüntü (gizleyecek olan)
-  File? _secretImage; // Gri görüntü (gizlenecek olan)
+  File? _secretImage; // (gizlenecek olan)
   bool _isProcessing = false;
   File? _resultImage;
 
@@ -53,7 +54,7 @@ class _EncodeScreenState extends State<EncodeScreen> {
               ),
               const SizedBox(height: 24),
               _buildImageSelectionSection(
-                title: 'Gizlenecek Gri Görüntü',
+                title: 'Gizlenecek Görüntü',
                 image: _secretImage,
                 onSelectImage: _selectSecretImage,
                 iconData: Icons.image_search,
@@ -63,7 +64,7 @@ class _EncodeScreenState extends State<EncodeScreen> {
                 onPressed: (_coverImage != null &&
                         _secretImage != null &&
                         !_isProcessing)
-                    ? _processImages
+                    ? _startEncoding
                     : null,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
@@ -274,30 +275,58 @@ class _EncodeScreenState extends State<EncodeScreen> {
     }
   }
 
-  Future<void> _processImages() async {
-    if (_coverImage == null || _secretImage == null) return;
+  Future<void> _startEncoding() async {
+    if (_coverImage == null || _secretImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Lütfen gerekli görüntüleri seçin')),
+      );
+      return;
+    }
 
-    setState(() {
-      _isProcessing = true;
-    });
+    setState(() => _isProcessing = true);
 
     try {
-      final resultImagePath = await SteganographyService().encodeImage(
+      // Şifreleme anahtarını sor
+      final encryptionKey = await DialogUtils.showEncryptionKeyDialog(
+        context,
+        isEncoding: true,
+      );
+
+      final stegoService = SteganographyService();
+      final resultPath = await stegoService.encodeImage(
         coverImagePath: _coverImage!.path,
         secretImagePath: _secretImage!.path,
+        encryptionKey: encryptionKey, // Anahtar null olabilir
       );
 
       setState(() {
-        _resultImage = File(resultImagePath);
+        _resultImage = File(resultPath);
       });
-    } catch (e) {
+
+      // Başarılı mesajı göster
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Hata: ${e.toString()}')),
+        SnackBar(
+          content: Text(
+            encryptionKey != null
+                ? 'Görüntü şifrelenerek gizlendi'
+                : 'Görüntü başarıyla gizlendi'
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Hata: $e'),
+          backgroundColor: Colors.red,
+        ),
       );
     } finally {
-      setState(() {
-        _isProcessing = false;
-      });
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 

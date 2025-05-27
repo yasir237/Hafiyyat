@@ -13,12 +13,14 @@ class SteganographyService {
   Future<String> encodeImage({
     required String coverImagePath,
     required String secretImagePath,
+    String? encryptionKey,
   }) async {
     File? tempFile;
     try {
       print('Encoding process started...');
       print('Cover image path: $coverImagePath');
       print('Secret image path: $secretImagePath');
+      print('Encryption key provided: ${encryptionKey != null}');
 
       // Validate file existence
       if (!await File(coverImagePath).exists()) {
@@ -50,8 +52,10 @@ class SteganographyService {
 
       // Encrypt secret image bytes before encoding
       print('Encrypting secret image...');
-      final encryptedSecretBytes = EncryptionService.encryptBytes(secretImageBytes);
-      print('Secret image encrypted: ${encryptedSecretBytes.length} bytes');
+      final encryptedSecretBytes = encryptionKey != null 
+          ? EncryptionService.encryptBytes(secretImageBytes, encryptionKey)
+          : secretImageBytes;
+      print('Secret image ${encryptionKey != null ? "encrypted" : "prepared"}: ${encryptedSecretBytes.length} bytes');
       
       // Process encoding in background
       print('Starting encoding process...');
@@ -104,22 +108,26 @@ class SteganographyService {
 
   Future<String> decodeImage({
     required String stegoImagePath,
+    String? encryptionKey,
   }) async {
     File? tempFile;
     try {
       print('Decoding process started...');
-      print('Stego image: $stegoImagePath');
+      print('Stego image path: $stegoImagePath');
+      print('Encryption key provided: ${encryptionKey != null}');
 
       // Load stego image
       final stegoImageBytes = await File(stegoImagePath).readAsBytes();
       
-      // Process decoding in background and decrypt the result
+      // Process decoding in background
       final extractedEncryptedBytes = await compute(_processDecoding, {
         'stegoImageBytes': stegoImageBytes,
       });
       
-      // Decrypt the extracted bytes
-      final decryptedBytes = EncryptionService.decryptBytes(extractedEncryptedBytes);
+      // Decrypt the extracted bytes if key is provided
+      final decryptedBytes = encryptionKey != null
+          ? EncryptionService.decryptBytes(extractedEncryptedBytes, encryptionKey)
+          : extractedEncryptedBytes;
       
       // Convert decrypted bytes to image
       final extractedImage = img.decodeImage(decryptedBytes);
@@ -127,15 +135,14 @@ class SteganographyService {
         throw Exception('Failed to decode extracted image');
       }
 
-      // Convert image to PNG bytes for saving
-      final pngBytes = img.encodePng(extractedImage);
-
       // Save result
       final tempDir = await getTemporaryDirectory();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final tempPath = '${tempDir.path}/extracted_temp_$timestamp.png';
       tempFile = File(tempPath);
       
+      // Convert image to PNG bytes for saving
+      final pngBytes = img.encodePng(extractedImage);
       await tempFile.writeAsBytes(pngBytes);
 
       // Get the pictures directory
