@@ -2,13 +2,51 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:image/image.dart' as img;
+import 'package:flutter/foundation.dart';
 
 class ImageProcessor {
   // Görüntü analizi yaparak steganografi için uygunluğunu kontrol eder
   static Future<Map<String, dynamic>> analyzeImages(File coverImage, File secretImage) async {
-    // Görüntüleri yükle
-    final coverImageBytes = await coverImage.readAsBytes();
-    final secretImageBytes = await secretImage.readAsBytes();
+    try {
+      // Görüntüleri yükle
+      final coverImageBytes = await coverImage.readAsBytes();
+      final secretImageBytes = await secretImage.readAsBytes();
+      
+      // Analizi isolate'de yap
+      return await compute(_analyzeImagesInIsolate, {
+        'coverImageBytes': coverImageBytes,
+        'secretImageBytes': secretImageBytes,
+      });
+    } catch (e) {
+      return {
+        'isValid': false,
+        'message': 'Görüntü analizi hatası: $e'
+      };
+    }
+  }
+  
+  // Görüntü kontrastını ve netliğini geliştirir (özellikle çıkarılan gri görüntüler için)
+  static Future<File> enhanceImage(File imageFile) async {
+    try {
+      final imageBytes = await imageFile.readAsBytes();
+      
+      // İyileştirmeyi isolate'de yap
+      final enhancedBytes = await compute(_enhanceImageInIsolate, imageBytes);
+      
+      // Sonucu kaydet
+      final resultPath = imageFile.path.replaceFirst('.png', '_enhanced.png');
+      final resultFile = File(resultPath);
+      await resultFile.writeAsBytes(enhancedBytes);
+      
+      return resultFile;
+    } catch (e) {
+      throw Exception('Görüntü iyileştirme işlemi başarısız: $e');
+    }
+  }
+
+  static Map<String, dynamic> _analyzeImagesInIsolate(Map<String, dynamic> params) {
+    final coverImageBytes = params['coverImageBytes'] as Uint8List;
+    final secretImageBytes = params['secretImageBytes'] as Uint8List;
     
     // Görüntüleri decode et
     final decodedCoverImage = img.decodeImage(coverImageBytes);
@@ -54,42 +92,29 @@ class ImageProcessor {
       'message': 'Görüntüler steganografi işlemi için uygun.'
     };
   }
-  
-  // Görüntü kontrastını ve netliğini geliştirir (özellikle çıkarılan gri görüntüler için)
-  static Future<File> enhanceImage(File imageFile) async {
-    try {
-      final imageBytes = await imageFile.readAsBytes();
-      final decodedImage = img.decodeImage(imageBytes)!;
-      
-      // Görüntüyü geliştir
-      final enhancedImage = img.adjustColor(
-        decodedImage,
-        contrast: 1.2, // Kontrast artırma
-        brightness: 0.05, // Hafif parlaklık artışı
-      );
-      
-      // Görüntüyü netleştirme filtresi uygula
-      final sharpenedImage = img.convolution(
-        enhancedImage,
-        filter: [
-          0, -1, 0,
-        -1,  5, -1,
-          0, -1, 0
-        ],
-      );
 
-      
-      // Sonucu PNG olarak kaydet
-      final resultBytes = img.encodePng(sharpenedImage);
-      
-      // Yeni dosya oluştur
-      final resultPath = imageFile.path.replaceFirst('.png', '_enhanced.png');
-      final resultFile = File(resultPath);
-      await resultFile.writeAsBytes(Uint8List.fromList(resultBytes));
-      
-      return resultFile;
-    } catch (e) {
-      throw Exception('Görüntü iyileştirme işlemi başarısız: $e');
-    }
+  static Uint8List _enhanceImageInIsolate(Uint8List imageBytes) {
+    // Görüntüyü decode et
+    final decodedImage = img.decodeImage(imageBytes)!;
+    
+    // Görüntüyü geliştir
+    final enhancedImage = img.adjustColor(
+      decodedImage,
+      contrast: 1.2,
+      brightness: 0.05,
+    );
+    
+    // Görüntüyü netleştirme filtresi uygula
+    final sharpenedImage = img.convolution(
+      enhancedImage,
+      filter: [
+        0, -1, 0,
+        -1, 5, -1,
+        0, -1, 0
+      ],
+    );
+    
+    // Sonucu PNG olarak kodla
+    return Uint8List.fromList(img.encodePng(sharpenedImage));
   }
 }

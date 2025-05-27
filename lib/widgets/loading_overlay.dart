@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 class LoadingOverlay extends StatelessWidget {
   final bool isLoading;
   final String loadingText;
-  final Color? loadingTextColor;
+  final Color loadingTextColor;
   final Widget child;
+  final String? progressText;
 
   const LoadingOverlay({
-    super.key,
+    Key? key,
     required this.isLoading,
     required this.loadingText,
+    required this.loadingTextColor,
     required this.child,
-    this.loadingTextColor,
-  });
+    this.progressText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +24,32 @@ class LoadingOverlay extends StatelessWidget {
         child,
         if (isLoading)
           Container(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withOpacity(0.3),
             child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF64FFDA)),
+                    strokeWidth: 3,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   Text(
-                    loadingText,
+                    progressText ?? loadingText,
                     style: TextStyle(
-                      color: loadingTextColor ?? Colors.white,
+                      color: loadingTextColor,
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withOpacity(0.6),
+                          offset: const Offset(0, 1),
+                          blurRadius: 2,
+                        ),
+                      ],
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),

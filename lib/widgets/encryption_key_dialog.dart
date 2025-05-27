@@ -114,16 +114,8 @@ class _EncryptionKeyDialogState extends State<EncryptionKeyDialog> {
                 ),
               const SizedBox(height: 24),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(null),
-                    child: const Text(
-                      'İptal',
-                      style: TextStyle(color: Color(0xFF64FFDA)),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
                       final key = _useEncryption || !widget.isEncoding 
@@ -134,11 +126,18 @@ class _EncryptionKeyDialogState extends State<EncryptionKeyDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF64FFDA),
                       foregroundColor: const Color(0xFF112240),
+                      minimumSize: const Size(120, 45),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text('Tamam'),
+                    child: const Text(
+                      'Devam',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),

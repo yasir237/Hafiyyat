@@ -25,6 +25,7 @@ class _EncodeScreenState extends State<EncodeScreen> {
   File? _secretImage; // (gizlenecek olan)
   bool _isProcessing = false;
   File? _resultImage;
+  String? _progressText;
 
   // Siber güvenlik renk teması
   static const Color _backgroundColor = Color(0xFF0A192F); // Koyu lacivert
@@ -41,6 +42,7 @@ class _EncodeScreenState extends State<EncodeScreen> {
         isLoading: _isProcessing,
         loadingText: 'Görüntü işleniyor...',
         loadingTextColor: _accentColor,
+        progressText: _progressText,
         child: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, MediaQuery.of(context).padding.bottom + 16.0),
           child: Column(
@@ -283,27 +285,36 @@ class _EncodeScreenState extends State<EncodeScreen> {
       return;
     }
 
-    setState(() => _isProcessing = true);
+    setState(() {
+      _isProcessing = true;
+      _progressText = 'Hazırlanıyor...';
+    });
 
     try {
-      // Şifreleme anahtarını sor
+      setState(() => _progressText = 'Şifreleme ayarları kontrol ediliyor...');
       final encryptionKey = await DialogUtils.showEncryptionKeyDialog(
         context,
         isEncoding: true,
       );
 
+      setState(() => _progressText = 'Görüntüler işleniyor...');
       final stegoService = SteganographyService();
+      
+      setState(() => _progressText = encryptionKey != null 
+        ? 'Görüntü şifreleniyor ve gizleniyor...'
+        : 'Görüntü gizleniyor...');
+      
       final resultPath = await stegoService.encodeImage(
         coverImagePath: _coverImage!.path,
         secretImagePath: _secretImage!.path,
-        encryptionKey: encryptionKey, // Anahtar null olabilir
+        encryptionKey: encryptionKey,
       );
 
       setState(() {
         _resultImage = File(resultPath);
+        _progressText = 'Tamamlandı!';
       });
 
-      // Başarılı mesajı göster
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -325,7 +336,10 @@ class _EncodeScreenState extends State<EncodeScreen> {
       );
     } finally {
       if (mounted) {
-        setState(() => _isProcessing = false);
+        setState(() {
+          _isProcessing = false;
+          _progressText = null;
+        });
       }
     }
   }

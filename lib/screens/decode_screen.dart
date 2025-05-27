@@ -22,6 +22,7 @@ class _DecodeScreenState extends State<DecodeScreen> {
   File? _stegoImage; // İçinde gizli görüntü olan resim
   bool _isProcessing = false;
   File? _extractedImage;
+  String? _progressText;
 
   // Siber güvenlik renk teması
   static const Color _backgroundColor = Color(0xFF0A192F); // Koyu lacivert
@@ -38,6 +39,7 @@ class _DecodeScreenState extends State<DecodeScreen> {
         isLoading: _isProcessing,
         loadingText: 'Gizli görüntü çıkarılıyor...',
         loadingTextColor: _accentColor,
+        progressText: _progressText,
         child: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, MediaQuery.of(context).padding.bottom + 16.0),
           child: Column(
@@ -226,26 +228,35 @@ class _DecodeScreenState extends State<DecodeScreen> {
       return;
     }
 
-    setState(() => _isProcessing = true);
+    setState(() {
+      _isProcessing = true;
+      _progressText = 'Hazırlanıyor...';
+    });
 
     try {
-      // Şifre çözme anahtarını sor
+      setState(() => _progressText = 'Şifre çözme ayarları kontrol ediliyor...');
       final decryptionKey = await DialogUtils.showEncryptionKeyDialog(
         context,
         isEncoding: false,
       );
 
+      setState(() => _progressText = 'Görüntü analiz ediliyor...');
       final stegoService = SteganographyService();
+      
+      setState(() => _progressText = decryptionKey != null 
+        ? 'Gizli görüntü çıkarılıyor...'
+        : 'Gizli görüntü çıkarılıyor...');
+      
       final resultPath = await stegoService.decodeImage(
         stegoImagePath: _stegoImage!.path,
-        encryptionKey: decryptionKey, // Anahtar null olabilir
+        encryptionKey: decryptionKey,
       );
 
       setState(() {
         _extractedImage = File(resultPath);
+        _progressText = 'Tamamlandı!';
       });
 
-      // Başarılı mesajı göster
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -267,7 +278,10 @@ class _DecodeScreenState extends State<DecodeScreen> {
       );
     } finally {
       if (mounted) {
-        setState(() => _isProcessing = false);
+        setState(() {
+          _isProcessing = false;
+          _progressText = null;
+        });
       }
     }
   }
