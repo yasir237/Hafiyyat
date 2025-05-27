@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:typed_data';
 import 'dart:convert';
+import 'package:hafiyyat/services/encryption_service.dart';
 
 class SteganographyService {
   static const int HEADER_SIZE = 96; // 32 bits each for width, height, and size
@@ -16,17 +17,47 @@ class SteganographyService {
     File? tempFile;
     try {
       print('Encoding process started...');
-      print('Cover image: $coverImagePath');
-      print('Secret image: $secretImagePath');
+      print('Cover image path: $coverImagePath');
+      print('Secret image path: $secretImagePath');
 
-      // Load images
+      // Validate file existence
+      if (!await File(coverImagePath).exists()) {
+        throw Exception('Cover image file does not exist: $coverImagePath');
+      }
+      if (!await File(secretImagePath).exists()) {
+        throw Exception('Secret image file does not exist: $secretImagePath');
+      }
+
+      // Load images with validation
       final coverImageBytes = await File(coverImagePath).readAsBytes();
+      print('Cover image bytes loaded: ${coverImageBytes.length} bytes');
+      
       final secretImageBytes = await File(secretImagePath).readAsBytes();
+      print('Secret image bytes loaded: ${secretImageBytes.length} bytes');
+      
+      // Validate image formats
+      final coverImage = img.decodeImage(coverImageBytes);
+      if (coverImage == null) {
+        throw Exception('Failed to decode cover image. Invalid format or corrupted file.');
+      }
+      print('Cover image decoded successfully: ${coverImage.width}x${coverImage.height}');
+      
+      final secretImage = img.decodeImage(secretImageBytes);
+      if (secretImage == null) {
+        throw Exception('Failed to decode secret image. Invalid format or corrupted file.');
+      }
+      print('Secret image decoded successfully: ${secretImage.width}x${secretImage.height}');
+
+      // Encrypt secret image bytes before encoding
+      print('Encrypting secret image...');
+      final encryptedSecretBytes = EncryptionService.encryptBytes(secretImageBytes);
+      print('Secret image encrypted: ${encryptedSecretBytes.length} bytes');
       
       // Process encoding in background
+      print('Starting encoding process...');
       final resultImage = await compute(_processEncoding, {
         'coverImageBytes': coverImageBytes,
-        'secretImageBytes': secretImageBytes,
+        'secretImageBytes': encryptedSecretBytes,
       });
 
       // Save result with maximum compression
@@ -82,10 +113,22 @@ class SteganographyService {
       // Load stego image
       final stegoImageBytes = await File(stegoImagePath).readAsBytes();
       
-      // Process decoding in background
-      final extractedImage = await compute(_processDecoding, {
+      // Process decoding in background and decrypt the result
+      final extractedEncryptedBytes = await compute(_processDecoding, {
         'stegoImageBytes': stegoImageBytes,
       });
+      
+      // Decrypt the extracted bytes
+      final decryptedBytes = EncryptionService.decryptBytes(extractedEncryptedBytes);
+      
+      // Convert decrypted bytes to image
+      final extractedImage = img.decodeImage(decryptedBytes);
+      if (extractedImage == null) {
+        throw Exception('Failed to decode extracted image');
+      }
+
+      // Convert image to PNG bytes for saving
+      final pngBytes = img.encodePng(extractedImage);
 
       // Save result
       final tempDir = await getTemporaryDirectory();
@@ -93,8 +136,6 @@ class SteganographyService {
       final tempPath = '${tempDir.path}/extracted_temp_$timestamp.png';
       tempFile = File(tempPath);
       
-      // Save with maximum quality
-      final pngBytes = img.encodePng(extractedImage, level: 0);
       await tempFile.writeAsBytes(pngBytes);
 
       // Get the pictures directory
@@ -130,46 +171,49 @@ class SteganographyService {
   }
 
   static img.Image _processEncoding(Map<String, dynamic> data) {
-    final coverImageBytes = data['coverImageBytes'] as Uint8List;
-    final secretImageBytes = data['secretImageBytes'] as Uint8List;
+    try {
+      final coverImageBytes = data['coverImageBytes'] as Uint8List;
+      final secretImageBytes = data['secretImageBytes'] as Uint8List;
 
-    // Decode images
-    final coverImage = img.decodeImage(coverImageBytes);
-    final secretImage = img.decodeImage(secretImageBytes);
-    
-    if (coverImage == null || secretImage == null) {
-      throw Exception('Failed to decode images');
+      print('Processing encoding - Cover bytes: ${coverImageBytes.length}, Secret bytes: ${secretImageBytes.length}');
+
+      // Decode images
+      final coverImage = img.decodeImage(coverImageBytes);
+      if (coverImage == null) {
+        throw Exception('Failed to decode cover image in processing');
+      }
+      print('Cover image decoded in processing: ${coverImage.width}x${coverImage.height}');
+
+      // Calculate maximum capacity
+      final maxBytes = ((coverImage.width * coverImage.height - HEADER_SIZE) ~/ 8);
+      print('Maximum capacity: $maxBytes bytes');
+      
+      if (secretImageBytes.length > maxBytes) {
+        throw Exception(
+          'Secret data too large. Maximum size: $maxBytes bytes, '
+          'Required: ${secretImageBytes.length} bytes'
+        );
+      }
+
+      // Create result image
+      final resultImage = img.Image.from(coverImage);
+      
+      // Embed header
+      _embedHeader(resultImage, coverImage.width, coverImage.height, secretImageBytes.length);
+      print('Header embedded successfully');
+      
+      // Embed data
+      _embedData(resultImage, secretImageBytes);
+      print('Data embedded successfully');
+
+      return resultImage;
+    } catch (e) {
+      print('Error in _processEncoding: $e');
+      rethrow;
     }
-
-    print('Cover image: ${coverImage.width}x${coverImage.height}');
-    print('Secret image: ${secretImage.width}x${secretImage.height}');
-
-    // Convert secret to grayscale and get bytes
-    final grayscaleSecret = img.grayscale(secretImage);
-    final grayscaleBytes = _imageToBytes(grayscaleSecret);
-    
-    // Calculate maximum capacity
-    final maxBytes = ((coverImage.width * coverImage.height - HEADER_SIZE) ~/ 8);
-    if (grayscaleBytes.length > maxBytes) {
-      throw Exception(
-        'Secret image too large. Maximum size: $maxBytes bytes, '
-        'Required: ${grayscaleBytes.length} bytes'
-      );
-    }
-
-    // Create result image
-    final resultImage = img.Image.from(coverImage);
-    
-    // Embed header
-    _embedHeader(resultImage, grayscaleSecret.width, grayscaleSecret.height, grayscaleBytes.length);
-    
-    // Embed data
-    _embedData(resultImage, grayscaleBytes);
-
-    return resultImage;
   }
 
-  static img.Image _processDecoding(Map<String, dynamic> data) {
+  static Uint8List _processDecoding(Map<String, dynamic> data) {
     final stegoImageBytes = data['stegoImageBytes'] as Uint8List;
     
     // Decode stego image
@@ -193,8 +237,7 @@ class SteganographyService {
     // Extract data
     final extractedBytes = _extractData(stegoImage, dataSize);
     
-    // Reconstruct image
-    return _bytesToImage(extractedBytes, width, height);
+    return extractedBytes;
   }
 
   static void _embedHeader(img.Image image, int width, int height, int dataSize) {

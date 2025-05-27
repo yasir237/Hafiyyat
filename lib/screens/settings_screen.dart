@@ -166,7 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildSectionTitle('Uygulama Hakkında'),
             _buildSettingTile(
               'Versiyon',
-              '1.1.0',
+              '1.2.0',
               icon: Icons.info_outline,
             ),
             _buildSettingTile(
