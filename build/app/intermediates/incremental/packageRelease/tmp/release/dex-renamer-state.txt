@@ -1,0 +1,4 @@
+#Wed May 21 02:17:14 TRT 2025
+base.0=E\:\\visual studio code projects\\mobile\\hafiyyat\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

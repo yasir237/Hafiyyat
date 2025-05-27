@@ -1,0 +1,19 @@
+<lint-module
+    format="1"
+    dir="C:\Users\besir\AppData\Local\Pub\Cache\hosted\pub.dev\media_store_plus-0.1.3\android"
+    name=":media_store_plus"
+    type="LIBRARY"
+    maven="com.snnafi.media_store_plus:media_store_plus:1.0-SNAPSHOT"
+    agpVersion="8.7.0"
+    buildFolder="E:\visual studio code projects\mobile\hafiyyat\build\media_store_plus"
+    bootClassPath="C:\Users\besir\AppData\Local\Android\sdk\platforms\android-33\android.jar;C:\Users\besir\AppData\Local\Android\sdk\build-tools\34.0.0\core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-33"
+    neverShrinking="true">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>
