@@ -35,6 +35,45 @@ Hafiyyat, her sürümde yeni özellikler ve iyileştirmelerle gelişen bir proje
 Gizleme ve çıkarma işlemlerinin her biri ayrı tuş olarak tasarlanmıştır, kullanıcıların teknik bilgiye ihtiyaç duymadan uygulamayı etkin bir şekilde kullanmalarını sağlar.
 
 
+## 🖼️ Görüntü Gizleme Süreci
+
+**Hafiyyat** uygulamasında bir görüntünün başka bir görüntüye güvenli ve gizli bir şekilde gömülmesi, aşağıdaki adımlar doğrultusunda gerçekleştirilir:
+
+1. **Cover (Kaplayıcı) Görüntünün Seçilmesi**
+   Kullanıcıdan, hedef görüntüyü gizleyeceği renkli bir "kaplayıcı" görüntü (cover image) seçmesi istenir. Bu görüntü, dışarıdan bakıldığında sadece normal bir fotoğraf gibi görünür.
+
+2. **Gizlenecek Görüntünün (Host) Alınması**
+   Ardından, kullanıcıdan içine gömülecek olan ikinci bir renkli görüntü seçmesi istenir. Bu görüntü, steganografi ve şifreleme işlemlerine tabi tutulacaktır.
+
+3. **Özel Anahtar İsteği (İsteğe Bağlı)**
+   Kullanıcıya, işlemi daha güvenli hale getirmek için isteğe bağlı olarak özel bir anahtar (custom key) eklemek isteyip istemediği sorulur.
+
+   * Eğer bir özel anahtar girilirse, bu anahtar daha sonra çıkarma (decryption) işlemi sırasında **zorunlu** olacaktır.
+   * Kullanıcı özel bir anahtar girmezse, sistem otomatik olarak "melazgirt" kelimesini varsayılan anahtar olarak kullanır. Bu sayede, yalnızca Hafiyyat uygulamasına özgü algoritma ile veri çözülebilir; farklı bir yöntemle gizlenen içeriğe erişilmesi mümkün olmaz.
+
+4. **Host Görüntünün PNG Formatında Sıkıştırılması**
+   Gizlenecek görüntü, kayıpsız bir sıkıştırma yöntemi olan PNG formatında encode edilerek boyutu küçültülür. Bu işlem, görüntünün gizleneceği alanı daha verimli kullanabilmek adına önemlidir.
+
+5. Özel anahtar, SHA-256 algoritmasıyla hashlenir.
+   Özel anahtar asla doğrudan görüntünün içine gömülmez. Çünkü gizlenecek veriyi korumak için bu anahtar kullanılır. Gömülseydi, şifre çözülmeden görüntüye ulaşmak mümkün olurdu. Bunun yerine, anahtardan türetilen değerler (örneğin AES anahtarı ve IV) şifreleme ve deşifreleme işlemlerinde kullanılır.
+   * İlk 16 bayt → AES-GCM için IV (Initialization Vector) olarak kullanılır.
+   * Tüm 32 bayt (256 bit) → AES algoritması için şifreleme anahtarı (Key) olur.
+
+6. **AES-GCM Algoritmasıyla Şifreleme**
+   Eğer kullanıcı özel bir anahtar girmişse, PNG ile sıkıştırılmış host görüntü, AES algoritmasının Galois/Counter Mode (GCM) kullanılarak şifrelenir.
+
+   * Anahtar ve IV (Initialization Vector), kullanıcının özel anahtarından SHA-256 ile türetilir.
+   * Bu adım, görüntünün yalnızca şifre çözme anahtarına sahip kişiler tarafından geri alınabilmesini sağlar.
+
+7. **Gizli Görüntünün LSB ile Gömülmesi**
+   Son adımda, şifrelenmiş (veya sadece sıkıştırılmış) host görüntü, Cover görüntünün piksellerine **LSB (Least Significant Bit)** yöntemiyle gömülür.
+
+   * Bu yöntem, görünür kaliteyi bozmadan veriyi saklamaya olanak tanır.
+   * Her bir pikselin kırmızı, yeşil ve mavi bileşenlerinin en düşük anlamlı bitleri, gizli görüntüye ait verilerle değiştirilir.
+
+
+
+
 ## 🛠️ Teknik Bilgi
 
 Bu bölümde, Hafiyyat uygulamasının altyapısını oluşturan teknik bileşenler, kullanılan teknolojiler ve mimari kararlar hakkında kapsamlı bir açıklama yer almaktadır. Uygulamanın temel amacı, gizlencek görüntüleri güvenli bir şekilde renkli görüntülerin içine gizlemek ve bu işlemi şifreleme ile entegre biçimde gerçekleştirmektir. Projede özellikle veri güvenliği, gizlilik ve mobilde performans ilkeleri göz önünde bulundurulmuştur.
