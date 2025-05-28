@@ -72,6 +72,9 @@ Gizleme ve çıkarma işlemlerinin her biri ayrı tuş olarak tasarlanmıştır,
    * Her bir pikselin kırmızı, yeşil ve mavi bileşenlerinin en düşük anlamlı bitleri, gizli görüntüye ait verilerle değiştirilir.
 
 
+<div align = center >
+  <img src = 'https://github.com/user-attachments/assets/4fa342df-34c0-456f-9d52-df2e6d5c0a99'>
+</div>
 
 
 ## 🛠️ Teknik Bilgi
