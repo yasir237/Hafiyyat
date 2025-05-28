@@ -1,16 +1,11 @@
-# hafiyyat
+# Hafiyyat
 
-A new Flutter project.
+## 📌 Proje Tanımı
 
-## Getting Started
+Hafiyyat, steganografi tekniğini kullanarak görüntülerin içerisine gizli veri yerleştirmeyi amaçlayan bir mobil uygulamadır. Flutter ile geliştirilen bu proje, kullanıcıların bir görüntüyü başka bir görüntüye görünmez bir şekilde yerleştirerek güvenli veri aktarımı ve saklamasını mümkün kılar.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+Uygulama temel olarak LSB (Least Significant Bit) yöntemiyle çalışır. LSB yöntemi düşük düzeyde sağlamlık sunsa da, Hafiyyat’ta bu zayıflık bir şifreleme katmanı ile desteklenmiş ve gizli verinin kırılganlığı azaltılmıştır.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+İlk sürümlerde yalnızca gri tonlamalı görüntüler desteklenirken, son versiyonlarda sıkıştırma ve şifreleme tekniklerinin eklenmesiyle birlikte artık renkli bir görüntünün, başka bir renkli görüntünün içine gömülmesi mümkün hâle gelmiştir. Hafiyyat bu yönüyle, hem eğitimsel bir örnek hem de temel düzeyde güvenli veri saklama amacı taşıyan pratik bir araçtır.
