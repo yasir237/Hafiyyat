@@ -210,4 +210,56 @@ Kodun güvenilirliğini artırmak ve beklenmedik hataları erkenden yakalayabilm
 * `fake_async`, `vm_service`: Zaman bağımlı senaryoları test etmek ve uygulamanın çalışma zamanında sistem kaynaklarını nasıl kullandığını analiz etmek için kullanılır.
 
 
+# 📦 Hafiyyat - Versionlar
+
+Tüm anlamlı değişikliklerin listesi aşağıda sıralanmıştır. Bu proje, [Semantik Sürümleme](https://semver.org/lang/tr/) kurallarını takip eder.
+
+---
+
+## [v1.3.1](https://github.com/yasir237/hafiyyat/releases/tag/v1.3.1) – UI Donma Sorunları Giderildi
+> 🗓️ Geliştirme Tarihi: 2025-05-28
+
+- Şifreleme ve çıkarma işlemlerinde kullanılan iş parçacıkları (threads) yeniden düzenlendi.
+- Ana iş parçacığında yürütülen işlemler nedeniyle yaşanan **arayüz donmaları giderildi**.
+- Uygulama artık daha akıcı ve kullanıcı dostu.
+
+---
+
+## [v1.3.0](https://github.com/yasir237/hafiyyat/releases/tag/v1.3.0) – Kullanıcı Anahtarı Desteği
+> 🗓️ Geliştirme Tarihi: 2025-05-20
+
+- Şifreleme işlemi için artık **kullanıcıdan özel bir anahtar alınabiliyor.**
+- Girilen anahtar SHA-256 ile hashlenip AES-GCM şifrelemesi için kullanılmakta.
+- Bu özellik, verinin yalnızca anahtarı bilen kişiler tarafından erişilebilir olmasını sağlar.
+
+---
+
+## [v1.2.0](https://github.com/yasir237/hafiyyat/releases/tag/v1.2.0) – Renkli Görüntü & Sıkıştırma
+> 🗓️ Geliştirme Tarihi: 2025-05-14
+
+- Gizlenecek görseller artık **renkli (RGB)** formatta destekleniyor.
+- Veriler, **PNG formatında kayıpsız sıkıştırma** ile daha küçük boyutlarda saklanabiliyor.
+- Bu güncellemeyle birlikte daha büyük verilerin gömülmesi mümkün hale geldi.
+
+---
+
+## [v1.1.0](https://github.com/yasir237/hafiyyat/releases/tag/v1.1.0) – Şifreleme Eklendi
+> 🗓️ Geliştirme Tarihi: 2025-05-10
+
+- Steganografik veriler artık **AES-GCM algoritmasıyla şifrelenebiliyor.**
+- Veri güvenliği için temel adım atıldı.
+
+---
+
+## [v1.0.0](https://github.com/yasir237/hafiyyat/releases/tag/v1.0.0) – İlk Kararlı Sürüm
+> 🗓️ Geliştirme Tarihi: 2025-05-05
+
+- **Hafiyyat**’ın ilk çalışabilir versiyonu yayınlandı.
+- Gri tonlamalı bir görsel, başka bir görselin içine gizlenebiliyor.
+- Şifreleme veya veri koruma mekanizmaları henüz bulunmuyordu.
+- Bu sürüm, temel steganografi mantığının sade bir prototipi olarak geliştirildi.
+
+
+
+
 
