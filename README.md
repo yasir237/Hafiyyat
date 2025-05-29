@@ -39,42 +39,101 @@ Gizleme ve çıkarma işlemlerinin her biri ayrı tuş olarak tasarlanmıştır,
 
 **Hafiyyat** uygulamasında bir görüntünün başka bir görüntüye güvenli ve gizli bir şekilde gömülmesi, aşağıdaki adımlar doğrultusunda gerçekleştirilir:
 
-1. **Cover (Kaplayıcı) Görüntünün Seçilmesi**
+#### 1. **Cover (Kaplayıcı) Görüntünün Seçilmesi**
    Kullanıcıdan, hedef görüntüyü gizleyeceği renkli bir "kaplayıcı" görüntü (cover image) seçmesi istenir. Bu görüntü, dışarıdan bakıldığında sadece normal bir fotoğraf gibi görünür.
 
-2. **Gizlenecek Görüntünün (Host) Alınması**
+#### 2. **Gizlenecek Görüntünün (Host) Alınması**
    Ardından, kullanıcıdan içine gömülecek olan ikinci bir renkli görüntü seçmesi istenir. Bu görüntü, steganografi ve şifreleme işlemlerine tabi tutulacaktır.
 
-3. **Özel Anahtar İsteği (İsteğe Bağlı)**
+#### 3. **Özel Anahtar İsteği (İsteğe Bağlı)**
    Kullanıcıya, işlemi daha güvenli hale getirmek için isteğe bağlı olarak özel bir anahtar (custom key) eklemek isteyip istemediği sorulur.
 
    * Eğer bir özel anahtar girilirse, bu anahtar daha sonra çıkarma (decryption) işlemi sırasında **zorunlu** olacaktır.
    * Kullanıcı özel bir anahtar girmezse, sistem otomatik olarak "melazgirt" kelimesini varsayılan anahtar olarak kullanır. Bu sayede, yalnızca Hafiyyat uygulamasına özgü algoritma ile veri çözülebilir; farklı bir yöntemle gizlenen içeriğe erişilmesi mümkün olmaz.
 
-4. **Host Görüntünün PNG Formatında Sıkıştırılması**
+#### 4. **Host Görüntünün PNG Formatında Sıkıştırılması**
    Gizlenecek görüntü, kayıpsız bir sıkıştırma yöntemi olan PNG formatında encode edilerek boyutu küçültülür. Bu işlem, görüntünün gizleneceği alanı daha verimli kullanabilmek adına önemlidir.
 
-5. Özel anahtar, SHA-256 algoritmasıyla hashlenir.
+#### 5. Özel anahtar, SHA-256 algoritmasıyla hashlenir.
    Özel anahtar asla doğrudan görüntünün içine gömülmez. Çünkü gizlenecek veriyi korumak için bu anahtar kullanılır. Gömülseydi, şifre çözülmeden görüntüye ulaşmak mümkün olurdu. Bunun yerine, anahtardan türetilen değerler (örneğin AES anahtarı ve IV) şifreleme ve deşifreleme işlemlerinde kullanılır.
    * İlk 16 bayt → AES-GCM için IV (Initialization Vector) olarak kullanılır.
    * Tüm 32 bayt (256 bit) → AES algoritması için şifreleme anahtarı (Key) olur.
 
-6. **AES-GCM Algoritmasıyla Şifreleme**
+#### 6. **AES-GCM Algoritmasıyla Şifreleme**
    Eğer kullanıcı özel bir anahtar girmişse, PNG ile sıkıştırılmış host görüntü, AES algoritmasının Galois/Counter Mode (GCM) kullanılarak şifrelenir.
 
    * Anahtar ve IV (Initialization Vector), kullanıcının özel anahtarından SHA-256 ile türetilir.
    * Bu adım, görüntünün yalnızca şifre çözme anahtarına sahip kişiler tarafından geri alınabilmesini sağlar.
 
-7. **Gizli Görüntünün LSB ile Gömülmesi**
+#### 7. **Gizli Görüntünün LSB ile Gömülmesi**
    Son adımda, şifrelenmiş (veya sadece sıkıştırılmış) host görüntü, Cover görüntünün piksellerine **LSB (Least Significant Bit)** yöntemiyle gömülür.
 
    * Bu yöntem, görünür kaliteyi bozmadan veriyi saklamaya olanak tanır.
    * Her bir pikselin kırmızı, yeşil ve mavi bileşenlerinin en düşük anlamlı bitleri, gizli görüntüye ait verilerle değiştirilir.
 
+Bir hata oluştuğunda veya veri bütünlüğünün bozulması durumunda, sistem kullanıcıyı hata mesajı ile bilgilendirir.
+
 
 <div align = center >
   <img src = 'https://github.com/user-attachments/assets/4fa342df-34c0-456f-9d52-df2e6d5c0a99'>
 </div>
+
+
+## 🖼️ Görüntü Çıkarma Süreci
+
+**Hafiyyat** uygulamasında, daha önce gizlenmiş bir görüntünün güvenli ve başarılı bir şekilde geri çıkarılması şu adımlarla gerçekleştirilir:
+
+#### 1. Stego Görüntünün Seçilmesi
+
+Kullanıcıdan, içerisinde gizli bir görüntü barındıran **Stego Görüntü**yü (önceden işlenmiş ve veriyi barındıran görsel) seçmesi istenir. Bu görüntü dışarıdan bakıldığında sıradan bir fotoğraf gibi görünür; ancak içinde şifreli veri taşır.
+
+#### 2. Özel Anahtarın Girilmesi
+
+Gizleme aşamasında kullanıcı özel bir anahtar belirlediyse, çıkarma işleminin yapılabilmesi için aynı anahtarın tekrar girilmesi gerekir.
+
+* Eğer kullanıcı anahtar girmezse, sistem otomatik olarak `"melazgirt"` kelimesini varsayılan anahtar olarak kullanır.
+* Bu yaklaşım, sadece **Hafiyyat** uygulamasıyla uyumlu çıkartma işlemini mümkün kılar; dış müdahaleleri önler.
+
+#### 3. Anahtarın SHA-256 ile Hashlenmesi
+
+Girilen anahtar doğrudan kullanılmaz. Bunun yerine:
+
+* **SHA-256** algoritması ile 256 bit uzunluğunda bir hash’e dönüştürülür.
+* Bu hash:
+
+  * İlk 16 baytı → AES-GCM algoritmasında **IV (Initialization Vector)** olarak,
+  * Tamamı → AES şifreleme için **Key (Anahtar)** olarak kullanılır.
+
+Bu yapı, hem şifre çözme güvenliğini artırır hem de istikrar sağlar.
+
+#### 4. Stego Görüntüden LSB ile Verinin Çözülmesi
+
+Stego görüntüdeki piksellerin en düşük anlamlı bitleri (LSB), sırayla okunarak gömülü veri elde edilir.
+
+* Bu işlem sonucunda, şifrelenmiş ve sıkıştırılmış **host görüntü**nün bayt dizisi ortaya çıkarılır.
+
+#### 5. AES-GCM ile Şifreyi Çözme
+
+Elde edilen veri, özel anahtar ile şifrelenmişse:
+
+* SHA-256'dan türetilmiş **Key** ve **IV** kullanılarak,
+* **AES-GCM** algoritmasıyla deşifre edilir.
+
+Bu adımda, yalnızca doğru anahtarı giren kullanıcılar veriye erişebilir.
+
+### 6. Host Görüntünün Yeniden Oluşturulması
+
+Şifre çözme işlemi başarıyla tamamlandıktan sonra, ortaya çıkan veri henüz ham hâlidir ve doğrudan bir görüntü olarak yorumlanamaz.
+Bu yüzden:
+
+* Şifrelenmeden önce uygulanan **PNG sıkıştırması**, bu aşamada **decode (çözme)** işlemine tabi tutulur.
+* Bu işlem sayesinde, sıkıştırılmış veriler tekrar anlamlı piksel bilgilerine dönüştürülerek orijinal renkli **host görüntü** eksiksiz şekilde geri elde edilir.
+
+Bu adım sonunda, kullanıcı gizli görüntüyü görüntüleyebilir ya da cihazına kaydedebilir.
+
+Yanlış anahtar girilmesi veya veri bütünlüğünün bozulması durumunda, sistem kullanıcıyı hata mesajı ile bilgilendirir.
+
+
 
 
 ## 🛠️ Teknik Bilgi
