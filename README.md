@@ -133,7 +133,9 @@ Bu adım sonunda, kullanıcı gizli görüntüyü görüntüleyebilir ya da ciha
 
 Yanlış anahtar girilmesi veya veri bütünlüğünün bozulması durumunda, sistem kullanıcıyı hata mesajı ile bilgilendirir.
 
-
+<div align = center >
+  <img src = 'https://github.com/user-attachments/assets/e4a10992-9e90-465a-8af0-066734280bc6'>
+</div>
 
 
 ## 🛠️ Teknik Bilgi
