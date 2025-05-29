@@ -75,7 +75,7 @@ Bir hata oluştuğunda veya veri bütünlüğünün bozulması durumunda, sistem
 
 
 <div align = center >
-  <img src = 'https://github.com/user-attachments/assets/1039cd97-e6b7-4639-9201-0341814e8e34'>
+  <img src = 'https://github.com/user-attachments/assets/f5cd0148-f30e-4630-b3f1-d0c2cd7695c5'>
 </div>
 
 
@@ -134,7 +134,7 @@ Bu adım sonunda, kullanıcı gizli görüntüyü görüntüleyebilir ya da ciha
 Yanlış anahtar girilmesi veya veri bütünlüğünün bozulması durumunda, sistem kullanıcıyı hata mesajı ile bilgilendirir.
 
 <div align = center >
-  <img src = 'https://github.com/user-attachments/assets/e4a10992-9e90-465a-8af0-066734280bc6'>
+  <img src = 'https://github.com/user-attachments/assets/999a9015-2a27-4f1d-9d9d-4779b34541b3'>
 </div>
 
 
