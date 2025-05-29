@@ -75,7 +75,7 @@ Bir hata oluştuğunda veya veri bütünlüğünün bozulması durumunda, sistem
 
 
 <div align = center >
-  <img src = 'https://github.com/user-attachments/assets/4fa342df-34c0-456f-9d52-df2e6d5c0a99'>
+  <img src = 'https://github.com/user-attachments/assets/1039cd97-e6b7-4639-9201-0341814e8e34'>
 </div>
 
 
