@@ -210,7 +210,7 @@ Kodun güvenilirliğini artırmak ve beklenmedik hataları erkenden yakalayabilm
 * `fake_async`, `vm_service`: Zaman bağımlı senaryoları test etmek ve uygulamanın çalışma zamanında sistem kaynaklarını nasıl kullandığını analiz etmek için kullanılır.
 
 
-# 📦 Hafiyyat - Versionlar
+# 📦 Versiyonlar
 
 Tüm anlamlı değişikliklerin listesi aşağıda sıralanmıştır. Bu proje, [Semantik Sürümleme](https://semver.org/lang/tr/) kurallarını takip eder.
 
