@@ -16,6 +16,12 @@ Uygulama temel olarak LSB (Least Significant Bit) yöntemiyle çalışır. LSB y
 İlk sürümlerde yalnızca gri tonlamalı görüntüler desteklenirken, son versiyonlarda sıkıştırma ve şifreleme tekniklerinin eklenmesiyle birlikte artık renkli bir görüntünün, başka bir renkli görüntünün içine gömülmesi mümkün hâle gelmiştir. Hafiyyat bu yönüyle, hem eğitimsel bir örnek hem de temel düzeyde güvenli veri saklama amacı taşıyan pratik bir araçtır.
 
 
+## 🎬 Uygulama Tanıtım Videosu
+
+[![Hafiyyat Kullanım Videosu](https://github.com/user-attachments/assets/26fbd9a8-f047-4f64-b605-1dfbbe565d74)](https://youtu.be/92ibbBdBu1U?si=DHxsW89ki2gAXukP)
+
+
+
 ## 🎯 Özellikler
 
 **🔒 Görünmez Güvenlik:**
