@@ -1,5 +1,10 @@
 # Hafiyyat
 
+
+<div align = center >
+  <img src = 'https://github.com/user-attachments/assets/7640bdcc-b2fc-4a0c-b7b2-10a8221c98f5' width=50% >
+</div>
+
 ## 📌 Proje Tanımı
 
 Hafiyyat, steganografi tekniğini kullanarak görüntülerin içerisine gizli veri yerleştirmeyi amaçlayan bir mobil uygulamadır. Flutter ile geliştirilen bu proje, kullanıcıların bir görüntüyü başka bir görüntüye görünmez bir şekilde yerleştirerek güvenli veri aktarımı ve saklamasını mümkün kılar.
@@ -34,6 +39,9 @@ Hafiyyat, her sürümde yeni özellikler ve iyileştirmelerle gelişen bir proje
 **🚀 Kolay Kullanım:**
 Gizleme ve çıkarma işlemlerinin her biri ayrı tuş olarak tasarlanmıştır, kullanıcıların teknik bilgiye ihtiyaç duymadan uygulamayı etkin bir şekilde kullanmalarını sağlar.
 
+<div align = center >
+  <img src = 'https://github.com/user-attachments/assets/ac671139-9e84-43df-8b15-060223bd46be'>
+</div>
 
 ## 🖼️ Görüntü Gizleme Süreci
 
