@@ -223,6 +223,13 @@ Tüm anlamlı değişikliklerin listesi aşağıda sıralanmıştır. Bu proje, 
 - Ana iş parçacığında yürütülen işlemler nedeniyle yaşanan **arayüz donmaları giderildi**.
 - Uygulama artık daha akıcı ve kullanıcı dostu.
 
+📲 **Denemek ister misin?**
+
+Android cihazına uygulamayı indirip deneyebilirsin:
+👉 [hafiyyat-v1.3.1.apk](https://github.com/yasir237/Hafiyyat/releases/download/v1.3.1/app-release.apk)
+
+> *Not: APK’yı yüklemeden önce “bilinmeyen kaynaklara izin ver” ayarını etkinleştirmen gerekebilir.*
+
 ---
 
 ## [v1.3.0](https://github.com/yasir237/hafiyyat/releases/tag/v1.3.0) – Kullanıcı Anahtarı Desteği
