@@ -282,7 +282,7 @@ Android cihazına uygulamayı indirip deneyebilirsin:
 
 
 
-## 📄 Lisans
+# 📄 Lisans
 
 Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.
 
