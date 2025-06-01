@@ -282,5 +282,17 @@ Android cihazına uygulamayı indirip deneyebilirsin:
 
 
 
+## 📄 Lisans
+
+Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.
+
+Hafiyyat uygulamasını kullanmakta özgürsünüz, ancak bu uygulamayı kullanan kişilerin aşağıdaki şartları kabul ettiği varsayılır:
+
+- Orijinal yazarı belirtmelidirler.
+- Herhangi bir garanti verilmez; uygulama "olduğu gibi" sunulmaktadır.
+- Kodun değiştirilmiş versiyonları dağıtılabilir, ancak aynı lisans ile.
+
+Detaylı bilgi için lütfen `LICENSE` dosyasına göz atın.
+
 
 
